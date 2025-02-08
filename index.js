@@ -5,14 +5,17 @@ import {fileURLToPath} from 'url'
 const app=express();
 const PORT=3000;
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+app.set('view engine','ejs');
+app.set('views',path.join(__dirname,'./views'))
 
 app.use(express.static(path.join(__dirname,'./static')))
 
 app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'./static/index.html'))
+    res.render('pages/index',{pageTitle:"Welcome"})
+    // res.sendFile(path.join(__dirname,'./static/index.html'))
 })
 app.get('/speakers',(req,res)=>{
     res.sendFile(path.join(__dirname,'./static/speakers.html'))
