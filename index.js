@@ -1,22 +1,77 @@
-import express from 'express'
-import path from 'path'
-import {fileURLToPath} from 'url'
-import router from './routes/routes.js'
-const app=express();
-const PORT=3000;
+// import express from 'express'
+// import path from 'path'
+// import {fileURLToPath} from 'url'
+// import router from './routes/routes.js'
+// import FeedbackService from './services/FeedbackService.js'
+// import SpeakerService from './services/SpeakerService.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const feedbackService=new FeedbackService('./data/feedback.json');
+// const speakerService=new SpeakerService('./data/speakers.json');
 
-app.set('view engine','ejs');
-app.set('views',path.join(__dirname,'./views'))
+// const app=express();
 
-app.use(express.static(path.join(__dirname,'./static')))
+// const PORT=3000;
+
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
+
+// app.set('view engine','ejs');
+// app.set('views',path.join(__dirname,'./views'))
+
+// app.use(express.static(path.join(__dirname,'./static')))
 
 
-app.use('/',router)
+// app.use('/',router({
+//     feedbackService,
+//     speakerService,
+// }))
 
-app.listen(PORT,()=>{
-    console.log(`Server running on ${PORT}`);
+// app.listen(PORT,()=>{
+//     console.log(`Server running on ${PORT}`);
     
-})
+// })
+
+
+
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import createRouter from "./routes/routes.js"; // Make sure it's a function
+import FeedbackService from "./services/FeedbackService.js";
+import SpeakerService from "./services/SpeakerService.js";
+import cokkieSession from 'cookie-session'
+const feedbackService = new FeedbackService("./data/feedback.json");
+const speakerService = new SpeakerService("./data/speakers.json");
+
+const app = express();
+const PORT = 3000;
+
+app.set('trust proxy',1);
+
+app.use(cokkieSession(
+    {
+        name:"session",
+        keys:["HJDD48FY&^%$","modw57HHNFS"]
+    }
+));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "./views"));
+
+app.use(express.static(path.join(__dirname, "./static")));
+
+// ✅ Correctly pass dependencies to the router function
+app.use(
+    "/",
+    createRouter({
+        feedbackService,
+        speakerService,
+    })
+);
+
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
+});
