@@ -28,7 +28,7 @@ export default function createRouter({ feedbackService, speakerService }) {
 
     router.get("/", (req, res) => {
       
-        res.render("pages/index", { pageTitle: "Welcome" });
+        res.render('layout', { pageTitle: "Welcome", template:'index'});
     });
 
     router.use("/speakers", speakerRoutes(speakerService));
