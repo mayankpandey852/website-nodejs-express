@@ -27,8 +27,9 @@ export default function createRouter({ feedbackService, speakerService }) {
     const router = express.Router();
     
     router.get("/", async (req, res) => {
+        const artwork = await speakerService.getAllArtwork();
         const topSpeakers = await speakerService.getList();
-        res.render('layout', { pageTitle: "Welcome", template:'index',topSpeakers});
+        res.render('layout', { pageTitle: "Welcome", template:'index',topSpeakers,artwork});
     });
 
     router.use("/speakers", speakerRoutes(speakerService));
