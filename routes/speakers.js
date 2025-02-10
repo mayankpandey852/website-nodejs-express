@@ -17,17 +17,21 @@
 
 import express from "express";
 
-export default function feedbackRoutes(feedbackService) {
+export default function feedbackRoutes(speakerService) {
     const router = express.Router();
+    
 
     router.get("/", async (req, res) => {
-        try {
-            const feedbackList = await feedbackService.getList();
-            res.json(feedbackList); // Send JSON response
-        } catch (error) {
-            res.status(500).json({ error: "Failed to load feedback data" });
-        }
+        const speakers = await speakerService.getList();
+        res.render('layout',{pageTitle:"Speakers",template:'speakers',speakers})
+
     });
+
+    router.get('/:shortName',async(req,res)=>{
+            const speaker = await speakerService.getSpeaker(req.params.shortName);
+            console.log(speaker);
+            res.render('layout',{pageTitle:"Sepakers Detail",template:'speaker-detail',speaker})
+    })
 
     return router;
 }
