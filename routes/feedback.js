@@ -14,6 +14,7 @@
 
 
 
+import { resolveTxt } from "dns";
 import express from "express";
 
 export default function feedbackRoutes(feedbackService) {
@@ -21,11 +22,11 @@ export default function feedbackRoutes(feedbackService) {
 
     router.get("/", async (req, res,next) => {
         try {
-            const feedbackList = await feedbackService.getList();
-            res.json(feedbackList); // Send JSON response
+            const feedback=await feedbackService.getList()
+          return res.render('layout', { pageTitle: "feedback", template:'feedback',feedback})
         } catch (error) {
-            res.status(500).json({ error: "Failed to load feedback data" });
             return next(error)
+            
         }
     });
 
