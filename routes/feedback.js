@@ -22,7 +22,7 @@ export default function feedbackRoutes(feedbackService) {
 
     router.get("/", async (req, res,next) => {
         try {
-            const feedback=await feedbackService.getList()
+        const feedback=await feedbackService.getList()
           return res.render('layout', { pageTitle: "feedback", template:'feedback',feedback})
         } catch (error) {
             return next(error)
