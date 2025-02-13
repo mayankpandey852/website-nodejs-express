@@ -26,10 +26,12 @@ import feedbackRoutes from "./feedback.js";
 export default function createRouter({ feedbackService, speakerService }) {
     const router = express.Router();
     
-    router.get("/", async (req, res) => {
+    router.get("/", async (req, res,next) => {
+        try{
         const artwork = await speakerService.getAllArtwork();
         const topSpeakers = await speakerService.getList();
-        res.render('layout', { pageTitle: "Welcome", template:'index',topSpeakers,artwork});
+        res.render('layout', { pageTitle: "Welcome", template:'index',topSpeakers,artwork});}
+        catch(error){return next(error)}
     });
 
     router.use("/speakers", speakerRoutes(speakerService));

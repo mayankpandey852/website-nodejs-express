@@ -21,19 +21,24 @@ export default function feedbackRoutes(speakerService) {
     const router = express.Router();
     
 
-    router.get("/", async (req, res) => {
+    router.get("/", async (req, res,next) => {
+        try{
         const speakers = await speakerService.getList();
         const artwork = await speakerService.getAllArtwork();
-        res.render('layout',{pageTitle:"Speakers",template:'speakers',speakers,artwork})
-
+        return res.render('layout',{pageTitle:"Speakers",template:'speakers',speakers,artwork})
+        }
+        catch(error){return next(error)}
     });
 
-    router.get('/:shortName',async(req,res)=>{
-        
+    router.get('/:shortName',async(req,res,next)=>{
+        try{
             const speaker = await speakerService.getSpeaker(req.params.shortName);
             const artwork = await speakerService.getArtworkForSpeaker(req.params.shortName);
-            res.render('layout',{pageTitle:"Sepakers Detail",template:'speaker-detail',speaker,artwork})
-    })
+          return  res.render('layout',{pageTitle:"Sepakers Detail",template:'speaker-detail',speaker,artwork})
+        }
+        catch(error){return next(error)}
+    
+        })
 
     return router;
 }
